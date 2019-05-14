@@ -29,26 +29,31 @@
         </div>
     </div>
     <br>
-    <div class="card">
-        <div class="card-header">
-            Daftar Tagihan Anda
-        </div>
-        <table class="table text-center">
+    @if(count($tagihans) !== 0)
+        <div class="card">
+            <div class="card-header">
+                Daftar Tagihan Anda
+            </div>
+            <table class="table text-center">
 
-            <thead>
+                <thead>
                 <th>Nomor Tagihan</th>
                 <th>Total</th>
                 <th>Cek tagihan</th>
-            </thead>
-            @foreach($tagihans as $tagihan)
-                @if(!$tagihan->status)
-                    <tr>
-                        <td>{{$tagihan->id}}</td>
-                        <td>{{$tagihan->total}}</td>
-                        <td><a href="{{route('siswa.cek_tagihan',['id_tagihan'=>$tagihan->id])}}" class="btn btn-primary">Detail</a></td>
-                    </tr>
-                @endif
-            @endforeach
-        </table>
-    </div>
+                </thead>
+
+                @foreach($tagihans as $tagihan)
+                    @if(!$tagihan->status)
+                        <tr>
+                            <td>{{$tagihan->id}}</td>
+                            <td>Rp{{number_format($tagihan->total,0)}}</td>
+                            <td><a href="{{route('siswa.cek_tagihan',['id_tagihan'=>$tagihan->id])}}" class="btn btn-primary">Detail</a></td>
+                        </tr>
+                    @endif
+                @endforeach
+
+            </table>
+        </div>
+    @endif
+    <br>
 </div>

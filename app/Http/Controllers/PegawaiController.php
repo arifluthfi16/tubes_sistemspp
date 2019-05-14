@@ -28,6 +28,10 @@ class PegawaiController extends Controller
             ->where('id_tagihan',$id)
             ->get();
 
+        DB::table('detail_tagihan')
+            ->where('id_tagihan',$id)
+            ->delete();
+
         DB::table('tagihan')
             ->where('id',$id)
             ->update([
@@ -45,6 +49,18 @@ class PegawaiController extends Controller
                 ]);
         }
 
+        return redirect()->route('pegawai.index');
+    }
 
+    public function deleteTagihan($id){
+        DB::table('detail_tagihan')
+            ->where('id_tagihan',$id)
+            ->delete();
+
+        DB::table('tagihan')
+            ->where('id',$id)
+            ->delete();
+
+        return redirect()->route('pegawai.index');
     }
 }

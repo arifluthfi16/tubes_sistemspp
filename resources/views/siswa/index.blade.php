@@ -70,7 +70,7 @@ function get_month($m){
         case 12 :
             return "Desember";
         default :
-            return "Kode Bulab tidak valid";
+            return "Kode Bulan tidak valid";
     }
 }
 ?>

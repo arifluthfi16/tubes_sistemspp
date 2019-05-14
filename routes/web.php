@@ -42,6 +42,11 @@ Route::group(['prefix'=>'pegawai','middleware'=>['auth','pegawai']], function(){
         'as' => 'pegawai.prosesTagihan'
     ]);
 
+    Route::post('/deleteTagihan/{id}', [
+        'uses' => 'PegawaiController@deleteTagihan',
+        'as' => 'pegawai.deleteTagihan'
+    ]);
+
 });
 
 
@@ -70,4 +75,13 @@ Route::group(['prefix'=>'siswa','middleware'=>['auth','siswa']], function(){
         'uses' => 'SPPController@bayarProses',
         'as' => 'siswa.proses'
         ]);
+
+    Route::delete('/cancelTagihan/{id_tagihan}', [
+        'uses' => 'SPPController@cancelTagihan',
+        'as' => 'siswa.cancelTagihan'
+    ]);
 });
+
+//Route::get('/testing/{id}', [
+//    'uses'=>'SPPController@getMonths'
+//]);

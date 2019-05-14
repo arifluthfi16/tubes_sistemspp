@@ -4,6 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             @include('siswa/includes/header')
+            @include('siswa/includes/utils')
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
@@ -12,7 +13,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Pilih SPP yang akan Dibayar</h5>
                         <form action="{{route('siswa.proses')}}" method="post">
-                            {{csrf_field()}}
+                            {{csrf_field()}}`
 
                             <table class="table table-bordered">
                                 <thead>
@@ -35,7 +36,11 @@
                                         </td>
                                         <td>
                                             @if(!$payment->status)
+                                                @if(in_array($payment->month,$month_info))
+                                                Terdaftar di Tagihan
+                                                @else
                                                 <input type="checkbox" name="payment[]" value="{{$payment->month}}">
+                                                @endif
                                             @else
 
                                             @endif
@@ -54,35 +59,3 @@
     </div>
 @endsection
 
-<?php
-function get_month($m){
-    switch ($m){
-        case 1 :
-            return "Januari";
-        case 2 :
-            return "Febuari";
-        case 3 :
-            return "Maret";
-        case 4 :
-            return "April";
-        case 5 :
-            return "Mei";
-        case 6 :
-            return "Juni";
-        case 7 :
-            return "Juli";
-        case 8 :
-            return "Agustus";
-        case 9 :
-            return "September";
-        case 10 :
-            return "Oktober";
-        case 11 :
-            return "November";
-        case 12 :
-            return "Desember";
-        default :
-            return "Kode Bulab tidak valid";
-    }
-}
-?>
