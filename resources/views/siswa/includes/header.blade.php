@@ -46,7 +46,7 @@
                     @if(!$tagihan->status)
                         <tr>
                             <td>{{$tagihan->id}}</td>
-                            <td>Rp{{number_format($tagihan->total,0)}}</td>
+                            <td>Rp{{($tagihan->total)}}</td>
                             <td><a href="{{route('siswa.cek_tagihan',['id_tagihan'=>$tagihan->id])}}" class="btn btn-primary">Detail</a></td>
                         </tr>
                     @endif

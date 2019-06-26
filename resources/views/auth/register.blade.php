@@ -45,6 +45,7 @@
                                     <select class="form-control" name="role" id="exampleFormControlSelect1">
                                         <option value="pegawai">Pegawai</option>
                                         <option value="siswa">Siswa</option>
+                                        <option value="admin">Admin</option>
                                     </select>
                                 </div>
                         </div>

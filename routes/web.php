@@ -82,6 +82,15 @@ Route::group(['prefix'=>'siswa','middleware'=>['auth','siswa']], function(){
     ]);
 });
 
-//Route::get('/testing/{id}', [
-//    'uses'=>'SPPController@getMonths'
-//]);
+//Route Group Admin
+Route::group(['prefix'=>'admin','middleware'=>['auth','admin']], function(){
+   Route::get('/', [
+       'uses' => 'AdminController@index',
+       'as' => 'admin.index'
+   ]);
+
+   Route::get('/daftaruser/',[
+      'uses' => 'AdminController@userlist',
+      'as' => 'admin.userlist'
+   ]);
+});

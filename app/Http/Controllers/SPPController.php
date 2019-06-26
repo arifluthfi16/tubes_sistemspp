@@ -44,11 +44,13 @@ class SPPController extends Controller
                 "user_id" => Auth::id(),
             ]);
 
-        //Jadi disini kita memasukkan data ke detail_tagihan untuk tagihan diatas yang baru dibuat
+        //Get Latest ID
+        $id = DB::table('tagihan')->max('id');
+        //Jadi disini kita memasukkan data ke detail_tagihan untuk tagihan  diatas yang baru dibuat
         foreach ($request->payment as $py){
             DB::table('detail_tagihan')
                 ->insert([
-                    'id_tagihan' => $nextId,
+                    'id_tagihan' => $id,
                     'month' => $py
             ]);
         }
@@ -56,7 +58,7 @@ class SPPController extends Controller
 
 
 
-        return redirect()->route('siswa.cek_tagihan',['id_tagihan'=>$nextId]);
+        return redirect()->route('siswa.cek_tagihan',['id_tagihan'=>$id]);
     }
 
     public function cekTagihan($id_tagihan){
@@ -77,7 +79,8 @@ class SPPController extends Controller
 
         $detail_tagihan = DB::table('tagihan')
         ->join('user_payment_info','tagihan.user_id','user_payment_info.user_id')
-        ->where('tagihan.id',Auth::id())
+        ->where('tagihan.user_id',Auth::id())
+        ->where('tagihan.id',$id_tagihan)
         ->wherein('month',$months)
         ->get();
 
