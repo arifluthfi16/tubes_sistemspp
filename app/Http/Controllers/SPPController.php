@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Users;
+use App\Profile;
 
 class SPPController extends Controller
 {
@@ -21,8 +23,18 @@ class SPPController extends Controller
         $tagihans = DB::table('tagihan')
             ->where('user_id',Auth::id())->get()
             ->where('status',0);
+        
+        $users_name = DB::table('users')
+            ->where('id', $id)->get();
+
+        $users_profile = DB::table('user_profile')
+            ->join('users', 'user_profile.user_id', 'users.id')
+            ->where('user_profile.user_id', Auth::id())
+            ->get();
 
         return view('siswa.bayar')
+             ->with('users_name', $users_name)
+            ->with('users_profile', $users_profile)
             ->with('payment_info',$payment_info)
             ->with('tagihans', $tagihans)
             ->with('month_info',$months);
@@ -77,6 +89,14 @@ class SPPController extends Controller
             ->where('user_id',Auth::id())->get()
             ;
 
+        $users_name = DB::table('users')
+            ->where('id', Auth::id())->get();
+
+        $users_profile = DB::table('user_profile')
+            ->join('users', 'user_profile.user_id', 'users.id')
+            ->where('user_profile.user_id', Auth::id())
+            ->get();
+
         $detail_tagihan = DB::table('tagihan')
         ->join('user_payment_info','tagihan.user_id','user_payment_info.user_id')
         ->where('tagihan.user_id',Auth::id())
@@ -85,6 +105,8 @@ class SPPController extends Controller
         ->get();
 
         return view('siswa.tagihan')
+            ->with('users_name', $users_name)
+            ->with('users_profile', $users_profile)
             ->with('data_tagihan',$data_tagihan)
             ->with('tagihans', $tagihans)
             ->with('detail_tagihan',$detail_tagihan);
@@ -98,13 +120,22 @@ class SPPController extends Controller
 
         $tagihans = DB::table('tagihan')
             ->where('user_id',$id)->get()
-            ->where('status',0);
+            ->where('status',0);        
+        
+        $users_name = DB::table('users')
+            ->where('id', $id)->get();
 
-        return view('siswa.index')
+        $users_profile = DB::table('user_profile')
+            ->join('users', 'user_profile.user_id', 'users.id')
+            ->where('user_profile.user_id', Auth::id())
+            ->get();
+
+            return view('siswa.index') 
+            ->with('users_name', $users_name)
+            ->with('users_profile', $users_profile)
             ->with('payments_info',$payments_info)
             ->with('tagihans', $tagihans);
     }
-
 
     //Utility Function
     private function calc_total(Array $months){
@@ -174,7 +205,96 @@ class SPPController extends Controller
         return redirect()->route('siswa.index');
     }
 
+    public function myProfile()
+    {
+        $id = Auth::id();
+        $payments_info = DB::table('user_payment_info')
+            ->where('user_id',$id)->get();
 
+        $tagihans = DB::table('tagihan')
+            ->where('user_id',$id)->get()
+            ->where('status',0);        
+        
+        //untuk header
+        $users_name = DB::table('users')
+            ->where('id', $id)->get();
+
+        $users_profile = DB::table('user_profile')
+            ->join('users', 'user_profile.user_id', 'users.id')
+            ->where('user_profile.user_id', Auth::id())
+            ->get();
+        
+        return view('siswa.profile.index')
+            ->with('users_name', $users_name)
+            ->with('users_profile', $users_profile)
+            ->with('payments_info',$payments_info)
+            ->with('tagihans', $tagihans);
+    }
+
+    public function edit($id)
+    {
+        $siswa = \App\Users::find($id);
+        
+        //for header
+        $users_name = DB::table('users')
+            ->where('id', $id)->get();
+
+        $users_profile = DB::table('user_profile')
+            ->join('users', 'user_profile.user_id', 'users.id')
+            ->where('user_profile.user_id', Auth::id())
+            ->get();
+        
+        $tagihans = DB::table('tagihan')
+            ->where('user_id',$id)->get()
+            ->where('status',0);  
+
+        return view('siswa.profile.index', ['siswa' => $siswa]) 
+        ->with('users_name', $users_name)
+        ->with('users_profile', $users_profile)
+        ->with('tagihans', $tagihans);
+    }
+
+    public function update(Request $request, $id)
+    {
+        //validasi jika ada error ketika mengedit data
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+            'Orangtua_wali' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        //for user
+        $siswa = \App\Users::find($id);
+
+        DB::table('users')
+            ->where('id', $siswa->id)
+            ->update([
+                'name' => $request->name
+            ]);
+
+        DB::table('user_profile')
+        ->where('user_profile.user_id', $siswa->id)
+        ->update([
+            'address' => $request->address,
+            'Orangtua_wali' => $request->Orangtua_wali
+        ]);
+
+        if($request->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalName();
+            $file->move(\base_path() ."/public/userimage", $extension);
+            $save = DB::table('user_profile')
+            ->where('user_profile.user_id', $siswa->id)
+            ->update([
+                'image' => $extension
+            ]);
+        }
+
+        return redirect('/siswa/profile')
+            ->with('success', 'Data Has Been Updated');
+    }
 
 }
 

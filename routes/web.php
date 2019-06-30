@@ -56,6 +56,12 @@ Route::group(['prefix'=>'siswa','middleware'=>['auth','siswa']], function(){
         return redirect()->route('siswa.index');
     });
 
+    //Controller Profile
+    Route::get('/profile', [
+        'uses' => 'SPPController@profile',
+        'as' => 'siswa.profile.index'
+    ]);
+
     Route::get('/cektagihan/{id_tagihan}',[
         'uses' => 'SPPController@cekTagihan',
         'as' => 'siswa.cek_tagihan'
@@ -80,6 +86,23 @@ Route::group(['prefix'=>'siswa','middleware'=>['auth','siswa']], function(){
         'uses' => 'SPPController@cancelTagihan',
         'as' => 'siswa.cancelTagihan'
     ]);
+
+    Route::get('/profile/', [
+        'uses' => 'SPPController@myProfile',
+        'as' => 'siswa.profile.index'
+        ]);
+
+    //siswa controller
+    Route::get('/profile/{id}', [
+        'uses' => 'SPPController@edit',
+        'as' => 'siswa.edit'
+    ]);
+
+    Route::post('/profile/{id}', [
+        'uses' => 'SPPController@update',
+        'as' => 'siswa.update'
+    ]);
+
 });
 
 //Route Group Admin

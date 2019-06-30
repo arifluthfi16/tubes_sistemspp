@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Pilih SPP yang akan Dibayar</h5>
                         <form action="{{route('siswa.proses')}}" method="post">
-                            {{csrf_field()}}`
+                            {{csrf_field()}}
 
                             <table class="table table-bordered">
                                 <thead>
@@ -50,7 +50,34 @@
 
                             </table>
                             <a href="{{route('siswa.index')}}" class="btn btn-danger">Batalkan</a>
-                            <input type="submit" class="btn btn-success float-right" value="Bayar">
+                            <a href="" class="btn btn-success float-right" data-toggle="modal" data-target="#BayarModal">Bayar</a>
+                            <!-- <input type="submit" class="btn btn-success float-right" value="Bayar"> -->
+
+                            <!-- Modal -->
+            <div class="modal fade" id="BayarModal" tabindex="-1" role="dialog" aria-labelledby="BayarModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="BayarModalLabel">Bayar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- <form action="{{route('siswa.proses')}}" method="post">
+                {{csrf_field()}}` -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p>Anda Yakin Ingin Membayar SPP ?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Bayar">
+                    </div>
+                <!-- </form> -->
+                </div>
+            </div>
+            </div>
                         </form>
                     </div>
                 </div>

@@ -4,7 +4,11 @@
             Dashboard Siswa
         </div>
         <div class="card-body">
-            <p class="text-center"><img class="img-fluid img-round" src="{{asset('userimage/user.jpg')}}"></p>
+            <p class="text-center">
+            @foreach($users_profile as $user_profile) 
+                <img class="img-fluid img-round" src="{{asset('userimage/'.$user_profile->image)}}" alt="...">
+            @endforeach
+            </p>
             <br>
             <table class="table">
                 <tr>
@@ -12,20 +16,40 @@
                         Nama
                     </td>
                     <td>
-                        Arif
+                        @foreach($users_name as $users)
+                        {{$users->name}}
+                        @endforeach
                     </td>
                 </tr>
                 <tr>
                     <td>
                         NIS
                     </td>
-                    <td>10117009</td>
+                    <td>@foreach($users_profile as $user_profile)
+                        {{$user_profile->nomor_induk}}
+                        @endforeach</td>
                 </tr>
                 <tr>
                     <td width="120px">Tahun Masuk</td>
-                    <td>2019</td>
+                    <td>@foreach($users_profile as $user_profile)
+                        {{$user_profile->tahun_masuk}}
+                        @endforeach</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>@foreach($users_profile as $user_profile)
+                        {{$user_profile->address}}
+                        @endforeach</td>
+                </tr>
+                <tr>
+                    <td>Nama Orang Tua/Wali</td>
+                    <td>@foreach($users_profile as $user_profile)
+                        {{$user_profile->Orangtua_wali}}
+                        @endforeach</td>
                 </tr>
             </table>
+            <hr>
+            <p class="text-center"><a href="{{Route('siswa.edit', ['id' => $users->id])}}" class="btn btn-primary mt-2">Edit Profile</a></p>
         </div>
     </div>
     <br>
