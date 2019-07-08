@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header">Menu</div>
+                    <div class="card-header">Menu Admin</div>
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
@@ -13,7 +13,8 @@
                             </div>
                         @endif
                     <ul class="list-group">
-                        <a href="{{route('admin.userlist')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Users</a>
+                        <a href="{{route('admin.siswa.index')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Siswa</a>
+                        <a href="{{route('admin.pegawai.index')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Pegawai</a>
                     </ul>
                     </div>
                 </div>

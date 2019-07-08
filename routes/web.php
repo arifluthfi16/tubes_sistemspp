@@ -112,8 +112,53 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']], function(){
        'as' => 'admin.index'
    ]);
 
-   Route::get('/daftaruser/',[
+   Route::get('/siswa',[
       'uses' => 'AdminController@userlist',
-      'as' => 'admin.userlist'
+      'as' => 'admin.siswa.index'
+   ]);
+
+   Route::get('/siswa/details/{id}', [
+       'uses' => 'AdminController@details', 
+       'as' => 'admin.siswa.edit'
+   ]);
+
+   Route::post('/siswa/', [
+       'uses' => 'AdminController@addSiswa',
+       'as' => 'admin.siswa.index'
+   ]);
+
+   Route::post('/siswa/details/{id}', [
+        'uses' => 'AdminController@updateDetails', 
+        'as' => 'admin.siswa.update'
+   ]);
+
+   Route::post('/siswa/details/{id}', [
+        'uses' => 'AdminController@deleteSiswa',
+        'as' => 'admin.siswa.delete'
+   ]);
+
+   Route::get('/pegawai/', [
+        'uses' => 'AdminController@detailsPegawai', 
+        'as' => 'admin.pegawai.index'
+   ]);
+
+   Route::post('/pegawai/', [
+       'uses' => 'AdminController@addPegawai', 
+       'as' => 'admin.pegawai.index'
+   ]);
+
+   Route::get('/pegawai/details/{id}', [
+        'uses' => 'AdminController@pegawaiDetails', 
+        'as' => 'admin.pegawai.edit'
+   ]);  
+
+   Route::post('/pegawai/details/{id}', [
+    'uses' => 'AdminController@updateDetailsPegawai', 
+    'as' => 'admin.pegawai.update'
+    ]);  
+
+    Route::post('/pegawai/{id}', [
+        'uses' => 'AdminController@deletePegawai',
+        'as' => 'admin.pegawai.delete'
    ]);
 });
