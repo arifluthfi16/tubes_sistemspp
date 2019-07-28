@@ -13,8 +13,9 @@
                             </div>
                         @endif
                     <ul class="list-group">
-                        <a href="{{route('admin.siswa.index')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Siswa</a>
-                        <a href="{{route('admin.pegawai.index')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Pegawai</a>
+                        <a href="{{route('admin.siswa.index')}}" class="btn btn-light mb-1" style="text-align: left; color: #333">Daftar Siswa</a>
+                        <a href="{{route('admin.pegawai.index')}}" class="btn btn-light mb-1" style="text-align: left; color: #333">Daftar Pegawai</a>
+                        <a href="{{route('admin.tahun.index')}}" class="btn btn-light mb-1" style="text-align: left; color: #333">Daftar Tahun Ajaran</a>
                     </ul>
                     </div>
                 </div>

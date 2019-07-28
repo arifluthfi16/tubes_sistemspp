@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
+use phpDocumentor\Reflection\Types\Array_;
 
 class RegisterController extends Controller
 {
@@ -75,27 +76,56 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $role = $data['role'];
+            $role = $data['role'];
 
-          $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => $role
-          ]);
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'role' => $role
+            ]);
 
-          if($role == 'siswa'){
-              for($i = 1; $i<=12;$i++){
-                  DB::table('user_payment_info')->insert([
-                      'user_id' => $user->id,
-                      'academic_year' => '2019',
-                      'fee' => 500000,
-                      'month' => $i,
-                      'status' => 0
-                  ]);
-              }
-          }
+            if($role == 'siswa'){
+                //Compose Array of Academic Year with 3 Element depend on the year
+                $currentYear = Carbon::now()->year;
+                $yearArr = [];
+                $yearArr[0] = $currentYear;
+                $yearArr[1] = $currentYear+1;
+                $yearArr[2] = $currentYear+2;
+
+            // Get Current and 3 Years Next
+            DB::table('user_profile')
+                ->insert([
+
+                ]);
+
+                foreach ($yearArr as $year ) {
+                    $acYearId = DB::table('tahun')
+                        ->select('id')
+                        ->where('start_year',$year)->get();
+
+                    for($i = 1; $i<=12;$i++){
+                        DB::table('user_payment_info')->insert([
+                            'user_id' => $user->id,
+                            'academic_year_id' => $acYearId[0]->id,
+                            'month' => $i,
+                            'status' => 0
+                        ]);
+                    }
+                }
+            }
+
+
 
         return $user;
+    }
+
+    public function getNextThree(){
+        $currentYear = Carbon::now()->year;
+        $yearArr = [];
+        $yearArr[0] = $currentYear;
+        $yearArr[1] = $currentYear+1;
+        $yearArr[2] = $currentYear+2;
+        return $yearArr;
     }
 }

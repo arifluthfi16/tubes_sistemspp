@@ -20,6 +20,12 @@ class PegawaiController extends Controller
     }
 
     public function prosesTagihan($id){
+        // Get Academic year
+        $ac_year = DB::table('tagihan')
+            ->select('academic_year_id')
+            ->where('id',$id)
+            ->first();
+
         $user_id = DB::table('tagihan')
             ->where('id',$id)
             ->first()->user_id;
@@ -42,6 +48,7 @@ class PegawaiController extends Controller
         foreach($months as $month){
             DB::table('user_payment_info')
                 ->where('user_id',$user_id)
+                ->where('academic_year_id',$ac_year->academic_year_id)
                 ->where('month',$month->month)
                 ->update([
                    'status' =>1,

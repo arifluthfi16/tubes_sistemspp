@@ -16,7 +16,7 @@
                                 <h5 class="card-title text-center">Total Tagihan</h5>
                             </li>
                             <li class="list-group-item">
-                                <h2 class="display-3 text-center">Rp{{($data_tagihan->total)}}</h2>
+                                <h2 class="display-3 text-center">{{rupiah($data_tagihan->total)}}</h2>
                                 <h5 class="text-center">Transfer ke : 514 050 6844</h5>
                                 <h6 class="text-center">Pembayaran akan dikonfirmasi 1x24 Jam</h6>
                                 <br>
@@ -30,7 +30,7 @@
                                     @foreach($detail_tagihan as $detail)
                                     <tr>
                                         <td>{{get_month($detail->month)}}</td>
-                                        <td>{{$detail->fee}}</td>
+                                        <td>{{rupiah($detail->fee)}}</td>
                                     </tr>
                                     @endforeach
                                 </table>

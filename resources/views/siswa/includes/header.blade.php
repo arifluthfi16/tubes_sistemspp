@@ -5,9 +5,6 @@
         </div>
         <div class="card-body">
             <p class="text-center">
-            @foreach($users_profile as $user_profile) 
-                <img class="img-fluid img-round" src="{{asset('userimage/'.$user_profile->image)}}" alt="...">
-            @endforeach
             </p>
             <br>
             <table class="table">
@@ -70,7 +67,7 @@
                     @if(!$tagihan->status)
                         <tr>
                             <td>{{$tagihan->id}}</td>
-                            <td>Rp{{($tagihan->total)}}</td>
+                            <td>{{rupiah($tagihan->total)}}</td>
                             <td><a href="{{route('siswa.cek_tagihan',['id_tagihan'=>$tagihan->id])}}" class="btn btn-primary">Detail</a></td>
                         </tr>
                     @endif
@@ -81,3 +78,10 @@
     @endif
     <br>
 </div>
+
+<?php
+function rupiah($angka){
+    $hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+    return $hasil_rupiah;
+}
+?>

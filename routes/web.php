@@ -72,7 +72,7 @@ Route::group(['prefix'=>'siswa','middleware'=>['auth','siswa']], function(){
         'as' => 'siswa.index'
     ]);
 
-    Route::get('/bayar/', [
+    Route::get('/bayar/{id}/', [
         'uses' => 'SPPController@bayarForm',
         'as' => 'siswa.bayar'
     ]);
@@ -127,16 +127,18 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']], function(){
        'as' => 'admin.siswa.index'
    ]);
 
-   Route::post('/siswa/details/{id}', [
-        'uses' => 'AdminController@updateDetails', 
+    Route::post('/siswa/details/{id}', [
+        'uses' => 'AdminController@updateDetails',
         'as' => 'admin.siswa.update'
-   ]);
+    ]);
 
-   Route::post('/siswa/details/{id}', [
+    Route::get('/siswa/delete/{id}', [
         'uses' => 'AdminController@deleteSiswa',
         'as' => 'admin.siswa.delete'
-   ]);
+    ]);
 
+
+//    Pegawai
    Route::get('/pegawai/', [
         'uses' => 'AdminController@detailsPegawai', 
         'as' => 'admin.pegawai.index'
@@ -157,8 +159,51 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']], function(){
     'as' => 'admin.pegawai.update'
     ]);  
 
-    Route::post('/pegawai/{id}', [
+    Route::get('/pegawai/{id}', [
         'uses' => 'AdminController@deletePegawai',
         'as' => 'admin.pegawai.delete'
    ]);
+
+//  Academic Year
+
+    Route::get('/tahun/', [
+       'uses' => 'AdminController@detailsTahun',
+        'as' => 'admin.tahun.index'
+    ]);
+
+    Route::get('/tahun/edit/{id}', [
+        'uses' => 'AdminController@detailsEditTahun',
+        'as' => 'admin.tahun.edit'
+    ]);
+
+    Route::post('/tahun/add', [
+        'uses' => 'AdminController@addTahun',
+        'as' => 'admin.tahun.add'
+    ]);
+
+    Route::post('/tahun/update', [
+        'uses' => 'AdminController@updateTahun',
+        'as' => 'admin.tahun.update'
+    ]);
+
+    Route::get('/tahun/delete/{id}', [
+        'uses' => 'AdminController@deleteTahun',
+        'as' => 'admin.tahun.delete'
+    ]);
+});
+
+
+//Route Group Test
+Route::group(['prefix'=>'test'], function(){
+    Route::get('/yearTest', [
+        'uses' => 'TestController@yearTest'
+    ]);
+
+    Route::get('/forceclose', [
+        'uses' => 'TestController@forceExit'
+    ]);
+
+    Route::get('/test2', [
+        'uses' => 'TestController@test2'
+    ]);
 });

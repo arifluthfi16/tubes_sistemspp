@@ -10,14 +10,19 @@ use App\Profile;
 
 class SPPController extends Controller
 {
-    public function bayarForm(){
+    public function bayarForm($ac_id){
+
         //Ambil id user
         $id = Auth::id();
         //Ambil yang mana saja yang sudah dibayar
-        $payment_info = DB::table('user_payment_info')->where('user_id',$id)->get();
+        $payment_info = DB::table('user_payment_info')
+            ->join('tahun','tahun.id','user_payment_info.academic_year_Id')
+            ->where('user_payment_info.user_id',$id)
+            ->where('user_payment_info.academic_year_id', $ac_id)
+            ->get();
+
         //Ambil setiap bulan yang ada di tagihan
         $months = $this->getMonths(Auth::id());
-
 
         //Fetch data tagihan buat header
         $tagihans = DB::table('tagihan')
@@ -32,28 +37,35 @@ class SPPController extends Controller
             ->where('user_profile.user_id', Auth::id())
             ->get();
 
+        $ac_info = DB::table('tahun')
+            ->select(array('tahun','id'))
+            ->where('id',$ac_id)
+            ->get();
+
         return view('siswa.bayar')
              ->with('users_name', $users_name)
-            ->with('users_profile', $users_profile)
-            ->with('payment_info',$payment_info)
-            ->with('tagihans', $tagihans)
-            ->with('month_info',$months);
-
-
+             ->with('users_profile', $users_profile)
+             ->with('payment_info',$payment_info)
+             ->with('tagihans', $tagihans)
+             ->with('month_info',$months)
+             ->with('ac_info', $ac_info);
     }
 
     public function bayarProses(Request $request){
-
         //Ambil next id karena kita harus insert ke DB tagihan, karena pakai query builder jadi gak tahu next id nya
-        //apa
+
+        // Get Academic Year
+        $ac_id = $request->ac_id;
+
         $nextId = DB::table('tagihan')->max('id')+1;
-        $total = $this->calc_total($request->payment)+$nextId;
+        $total = $this->calc_total($request->payment,$ac_id)+$nextId;
 
         //Membuat tagihan baru
         $db = DB::table('tagihan')
             ->insert([
                 "total" => $total,
                 "user_id" => Auth::id(),
+                "academic_year_id" => $request->ac_id
             ]);
 
         //Get Latest ID
@@ -63,12 +75,10 @@ class SPPController extends Controller
             DB::table('detail_tagihan')
                 ->insert([
                     'id_tagihan' => $id,
-                    'month' => $py
+                    'month' => $py,
+                    'academic_year_id' => $request->ac_id
             ]);
         }
-
-
-
 
         return redirect()->route('siswa.cek_tagihan',['id_tagihan'=>$id]);
     }
@@ -83,6 +93,12 @@ class SPPController extends Controller
             -> where('id',$id_tagihan)
             -> where('user_id',Auth::id())
             -> first();
+
+        // Ambil Data Academic Year
+        $ac_year = DB::table('tagihan')
+            ->select('academic_year_id')
+            ->where('id',$id_tagihan)
+            ->first();
 
         //Data Untuk Header
         $tagihans = DB::table('tagihan')
@@ -99,8 +115,10 @@ class SPPController extends Controller
 
         $detail_tagihan = DB::table('tagihan')
         ->join('user_payment_info','tagihan.user_id','user_payment_info.user_id')
+        ->join('tahun','user_payment_info.academic_year_id','tahun.id')
         ->where('tagihan.user_id',Auth::id())
         ->where('tagihan.id',$id_tagihan)
+        ->where('user_payment_info.academic_year_id',$ac_year->academic_year_id)
         ->wherein('month',$months)
         ->get();
 
@@ -115,35 +133,61 @@ class SPPController extends Controller
 
     public function siswaIndex(){
         $id = Auth::id();
-        $payments_info = DB::table('user_payment_info')
-            ->where('user_id',$id)->get();
 
         $tagihans = DB::table('tagihan')
             ->where('user_id',$id)->get()
             ->where('status',0);        
-        
+
+        // Ambil Username
         $users_name = DB::table('users')
             ->where('id', $id)->get();
 
+        //Ambil Profile User
         $users_profile = DB::table('user_profile')
             ->join('users', 'user_profile.user_id', 'users.id')
             ->where('user_profile.user_id', Auth::id())
             ->get();
 
-            return view('siswa.index') 
+        //Ambil Info Tahun user
+        $year_info = DB::table('user_payment_info')
+            ->select('academic_year_id')
+            ->distinct()
+            ->where('user_id',$id)
+            ->get();
+
+        // Ambil Nama Tahun User
+        $year_name = [];
+
+        $payments_info = [];
+        foreach ($year_info as $year){
+            $arrItem = DB::table('user_payment_info')
+                ->join('tahun','tahun.id','user_payment_info.academic_year_Id')
+                ->where('user_payment_info.user_id',$id)
+                ->where('user_payment_info.academic_year_id', $year->academic_year_id)
+                ->get();
+            array_push($payments_info, $arrItem);
+        }
+//        dd($payments_info);
+        return view('siswa.index')
             ->with('users_name', $users_name)
             ->with('users_profile', $users_profile)
             ->with('payments_info',$payments_info)
-            ->with('tagihans', $tagihans);
+            ->with('tagihans', $tagihans)
+            ->with('year_info',$year_info)
+            ->with('year_name',$year_name);
     }
 
+
     //Utility Function
-    private function calc_total(Array $months){
+    private function calc_total(Array $months,$ac_id){
         $total = 0;
+
         foreach($months as $month){
             $fee = DB::table('user_payment_info')
-                ->where('user_id', Auth::id())
-                ->where('month',$month)
+                ->join('tahun','tahun.id','user_payment_info.academic_year_id')
+                ->where('user_payment_info.academic_year_id', $ac_id)
+                ->where('user_payment_info.user_id', Auth::id())
+                ->where('user_payment_info.month',$month)
                 ->first();
 
             $total += $fee->fee;

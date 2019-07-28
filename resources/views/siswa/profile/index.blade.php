@@ -59,18 +59,6 @@
                             <input type="text" class="form-control" id="Orangtua_wali" name="Orangtua_wali" value="@foreach($users_profile as $user_profile) {{$user_profile->Orangtua_wali}} @endforeach">
                         </div>
                         </div>
-                        <div class="form-group row">
-                        <div class="col-sm-5">
-                        @foreach($users_profile as $user_profile) 
-                            <img class="img-fluid img-round" src="{{asset('userimage/'.$user_profile->image)}}" alt="...">
-                        @endforeach
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="file" class="custom-file-input" id="image" name="image">
-                            <label class="custom-file-label" for="image">Choose file</label>
-                        </div>
-                        </div>
-                        
                         <a href="{{route('siswa.profile.index')}}" class="btn btn-danger">Batalkan</a>
                         <a href="" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">Edit</a>
                             <!-- <input type="submit" class="btn btn-success float-right" value="Bayar"> -->
@@ -100,6 +88,7 @@
                             </div>
                         </div>
                         </div>
+                        </form>
                                 </div>
                             </div>
                         </div>

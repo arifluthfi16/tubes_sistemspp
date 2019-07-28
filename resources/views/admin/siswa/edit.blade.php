@@ -13,7 +13,9 @@
                             </div>
                         @endif
                         <ul class="list-group">
-                            <a href="{{route('admin.siswa.index')}}" class="btn btn-light" style="text-align: left; color: #333">Daftar Siswa</a>
+                            <a href="{{route('admin.siswa.index')}}" class="btn btn-light mb-10" style="text-align: left; color: #333">Daftar Siswa</a>
+                            <a href="{{route('admin.pegawai.index')}}" class="btn btn-light mb-10" style="text-align: left; color: #333">Daftar Pegawai</a>
+                            <a href="{{route('admin.tahun.index')}}" class="btn btn-light">Daftar Tahun Ajaran</a>
                         </ul>
                     </div>
                 </div>
@@ -28,7 +30,7 @@
                             </div>
                         @endif
                         @foreach($users_name as $users)
-                        <form action="{{Route('admin.siswa.update', ['id' => $users->id])}}" method="post">
+                        <form action="{{route('admin.siswa.update', ['id' => $users->id])}}" method="post">
                         @endforeach
                 {{csrf_field()}}
                     <div class="modal-body">
@@ -74,6 +76,7 @@
                                 <input type="text" required class="form-control" id="tahun_masuk" name="tahun_masuk" value="@foreach($users_profile as $User_profile) {{$user_profile->tahun_masuk}} @endforeach">
                             </div>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <a href="{{route('admin.siswa.index')}}" class="btn btn-secondary" data-dismiss="modal">Batalkan</a>
