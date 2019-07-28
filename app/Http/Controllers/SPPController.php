@@ -16,7 +16,7 @@ class SPPController extends Controller
         $id = Auth::id();
         //Ambil yang mana saja yang sudah dibayar
         $payment_info = DB::table('user_payment_info')
-            ->join('tahun','tahun.id','user_payment_info.academic_year_Id')
+            ->join('academic_year','academic_year.id','user_payment_info.academic_year_Id')
             ->where('user_payment_info.user_id',$id)
             ->where('user_payment_info.academic_year_id', $ac_id)
             ->get();
@@ -37,8 +37,8 @@ class SPPController extends Controller
             ->where('user_profile.user_id', Auth::id())
             ->get();
 
-        $ac_info = DB::table('tahun')
-            ->select(array('tahun','id'))
+        $ac_info = DB::table('academic_year')
+            ->select(array('academic_year','id'))
             ->where('id',$ac_id)
             ->get();
 
@@ -115,7 +115,7 @@ class SPPController extends Controller
 
         $detail_tagihan = DB::table('tagihan')
         ->join('user_payment_info','tagihan.user_id','user_payment_info.user_id')
-        ->join('tahun','user_payment_info.academic_year_id','tahun.id')
+        ->join('academic_year','user_payment_info.academic_year_id','academic_year.id')
         ->where('tagihan.user_id',Auth::id())
         ->where('tagihan.id',$id_tagihan)
         ->where('user_payment_info.academic_year_id',$ac_year->academic_year_id)
@@ -161,7 +161,7 @@ class SPPController extends Controller
         $payments_info = [];
         foreach ($year_info as $year){
             $arrItem = DB::table('user_payment_info')
-                ->join('tahun','tahun.id','user_payment_info.academic_year_Id')
+                ->join('academic_year','academic_year.id','user_payment_info.academic_year_Id')
                 ->where('user_payment_info.user_id',$id)
                 ->where('user_payment_info.academic_year_id', $year->academic_year_id)
                 ->get();
@@ -184,7 +184,7 @@ class SPPController extends Controller
 
         foreach($months as $month){
             $fee = DB::table('user_payment_info')
-                ->join('tahun','tahun.id','user_payment_info.academic_year_id')
+                ->join('academic_year','academic_year.id','user_payment_info.academic_year_id')
                 ->where('user_payment_info.academic_year_id', $ac_id)
                 ->where('user_payment_info.user_id', Auth::id())
                 ->where('user_payment_info.month',$month)
