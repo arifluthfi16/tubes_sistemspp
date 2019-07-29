@@ -43,8 +43,6 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
                                 <div class="col-md-6">
                                     <select class="form-control" name="role" id="exampleFormControlSelect1">
-                                        <option value="pegawai">Pegawai</option>
-                                        <option value="siswa">Siswa</option>
                                         <option value="admin">Admin</option>
                                     </select>
                                 </div>
