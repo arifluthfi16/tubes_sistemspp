@@ -412,19 +412,11 @@ class AdminController extends Controller
     // Download SQL
 
     public function backupSQL(){
-//        $cmd =  "mysqldump -h " . env('DB_HOST') .
-//                " -u "          . env('DB_USERNAME') .
-//                " -p\""         . env('DB_PASSWORD') . "\"" .
-//                " --databases " . env('DB_DATABASE');
-        $databaseName = env('DB_DATABASE');
-        $userName = env('DB_USERNAME');
-        $password = env('DB_PASSWORD');
-
-        exec('C:\xampp2\mysql\bin\mysqldump.exe "--user=root" "--password=" laravel_sistemspp > D:/bac2.sql');
+        exec('C:\xampp2\mysql\bin\mysqldump.exe "--user=root" "--password=" laravel_sistemspp > D:/backup.sql');
 
 
 
-        return redirect(route('admin.riwayat_tagihan.index'));
+        return view(('admin.riwayat_tagihan.notice_backup'));
     }
 
 }
