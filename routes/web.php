@@ -190,6 +190,27 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']], function(){
         'uses' => 'AdminController@deleteTahun',
         'as' => 'admin.tahun.delete'
     ]);
+
+//  Riwayat Tagihan
+    Route::get('/riwayat_tagihan/', [
+            'uses' => 'AdminController@indexRiwayat',
+            'as' => 'admin.riwayat_tagihan.index'
+        ]);
+
+    Route::get('/riwayat_tagihan/cetak', [
+            'uses' => 'AdminController@cetakTagihan',
+            'as' => 'admin.riwayat_tagihan.cetak'
+        ]);
+
+    Route::get('/riwayat_tagihan/backup', [
+        'uses' => 'AdminController@backupSQL',
+        'as' => 'admin.riwayat_tagihan.backup'
+    ]);
+
+
+//  Download Database
+
+
 });
 
 

@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Support\Facades\Artisan;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -384,7 +386,45 @@ class AdminController extends Controller
         return redirect(route('admin.tahun.index'));
     }
 
+//    Riwayat
+        public function indexRiwayat(){
+            $data = DB::table('tagihan')
+            ->join('users','users.id','tagihan.user_id')
+            ->select('*')
+            ->get();
+
+            return view('admin.riwayat_tagihan.index')
+            ->with('dataTagihan',$data);
+    }
+
+    public function cetakTagihan(){
+        $data = DB::table('tagihan')
+            ->join('users','users.id','tagihan.user_id')
+            ->select('*')
+            ->get();
 
 
+        $pdf = PDF::loadView('admin.riwayat_tagihan.tagihan_pdf',['tagihan'=>$data]);
+//        return $pdf->download('laporan-tagihan.pdf');
+        return $pdf->stream();
+    }
+
+    // Download SQL
+
+    public function backupSQL(){
+//        $cmd =  "mysqldump -h " . env('DB_HOST') .
+//                " -u "          . env('DB_USERNAME') .
+//                " -p\""         . env('DB_PASSWORD') . "\"" .
+//                " --databases " . env('DB_DATABASE');
+        $databaseName = env('DB_DATABASE');
+        $userName = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+
+        exec('C:\xampp2\mysql\bin\mysqldump.exe "--user=root" "--password=" laravel_sistemspp > D:/bac2.sql');
+
+
+
+        return redirect(route('admin.riwayat_tagihan.index'));
+    }
 
 }
